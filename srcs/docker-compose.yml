@@ -9,3 +9,10 @@ services:
     build:
       context: requirements/nginx
       dockerfile: dockerfile
+
+  mariadb:
+    image: mariadb
+    container_name: mariadb
+    build:
+      context: requirements/mariadb
+      dockerfile: dockerfile
