@@ -1,8 +1,14 @@
 
-FROM debian:buster
+FROM debian:bullseye
 
 RUN apt-get update && apt-get upgrade -y && apt-get install mariadb-server -y
 RUN apt-get install vim -y
 RUN apt-get install curl -y
+RUN mkdir tools
 
+COPY tools/init_db.sh tools/init_db.sh
+
+EXPOSE 3306
+
+CMD ["sh", "tools/init_db.sh"]
 CMD ["mysqld_safe"]

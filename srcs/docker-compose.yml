@@ -9,6 +9,7 @@ services:
     build:
       context: requirements/nginx
       dockerfile: dockerfile
+    env_file: .env
 
   mariadb:
     image: mariadb
@@ -16,3 +17,4 @@ services:
     build:
       context: requirements/mariadb
       dockerfile: dockerfile
+    env_file: .env

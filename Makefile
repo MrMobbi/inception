@@ -15,7 +15,7 @@ stop:
 nginx:
 		docker exec -it nginx bash
 
-mariadb:
+db:
 		docker exec -it mariadb bash
 
 ls:

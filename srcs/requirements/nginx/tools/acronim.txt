@@ -1,0 +1,6 @@
+
+.csr -> Certificate Signed Request
+.key -> It is a key that are connect with other file
+.crt -> Self-Signed Certificate (signed but not trusted)
+CA   -> Certificate Authority
+
