@@ -12,11 +12,14 @@ up:
 stop:
 		docker-compose -f $(DCOMP_PATH) down
 
-nginx:
+ng:
 		docker exec -it nginx bash
 
 db:
 		docker exec -it mariadb bash
+
+wp:
+		docker exec -it wordpress bash
 
 ls:
 		docker image ls
