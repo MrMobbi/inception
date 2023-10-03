@@ -1,26 +1,27 @@
 
 FROM debian:bullseye
 
-RUN apt-get update -y && apt-get upgrade -y
-RUN apt-get install vim -y
-RUN apt-get install wget -y
+# installation of the service
+RUN apt-get update && apt-get upgrade -y
+RUN apt-get install vim \
+    wget \
+    php7.3 \
+    php-fpm \
+    php-mysql \
+    mariadb-client -y
 
-# installation of the php service
-RUN apt-get install php7.3\
-                    php-fpm\
-                    php-mysql\
-                    mariadb-client -y
+COPY conf/www.conf /etc/php/7.3/fpm/pool.d/www.conf
 
-# instalation of wordpress and giving access to root
-RUN wget https://fr.wordpress.org/wordpress-6.3-fr_FR.tar.gz -P /var/www
-RUN cd /var/www && tar -xzf wordpress-6.3-fr_FR.tar.gz && rm wordpress-6.3-fr_FR.tar.gz
-RUN chown -R root:root /var/www/wordpress
+RUN mkdir -p /run/php
 
-#installation of CLI [inteface textuel pour ligne de commande]
-RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
-RUN chmod +x wp-cli.phar
-RUN mv wp-cli.phar /usr/local/bin/wp
+COPY ./tools/config_wp.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/config_wp.sh
 
-COPY conf/www.conf /etc/php/7.4/fpm/pool.d/www.conf
+EXPOSE 9000
 
-CMD ["sleep", "90000000000"]
+ENTRYPOINT ["sh", "/usr/local/bin/config_wp.sh"]
+
+WORKDIR /var/www/html
+
+#CMD ["sleep", "10000000000000000"]
+CMD ["/usr/sbin/php-fpm7.4", "-F"]

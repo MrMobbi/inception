@@ -1,10 +1,16 @@
 
-SRCS_PATH	= srcs/
+VOLUME_PATH	= srcs/data
 
 DCOMP_PATH	= srcs/docker-compose.yml
 
-build:
+all:	build up
+
+build:	create_folder_data
 		docker-compose -f $(DCOMP_PATH) build
+
+create_folder_data:
+		mkdir -p $(VOLUME_PATH)/wordpress
+		mkdir -p $(VOLUME_PATH)/mariadb
 
 up:
 		docker-compose -f $(DCOMP_PATH) up -d
@@ -23,6 +29,15 @@ wp:
 
 ls:
 		docker image ls
+		docker ps
+		docker volume ls
 
-clean: 
+clean:	stop clean_volumes
 		docker system prune -a -f
+
+clean_volumes:
+		docker volume rm $$(docker volume ls -q);
+		rm -rf $(VOLUME_PATH)/mariadb
+		rm -rf $(VOLUME_PATH)/wordpress
+
+re:		clean all

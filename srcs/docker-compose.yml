@@ -3,6 +3,11 @@ version: '3.8'
 services:
   nginx:
     image: nginx
+    volumes:
+      - wordpress_data:/var/www/html
+    networks:
+      - my_network
+    restart: always
     container_name: nginx
     ports:
       - "443:443"
@@ -13,7 +18,14 @@ services:
 
   mariadb:
     image: mariadb
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    networks:
+      - my_network
+    restart: always
     container_name: mariadb
+    expose:
+      - "3306"
     build:
       context: requirements/mariadb
       dockerfile: dockerfile
@@ -21,8 +33,36 @@ services:
 
   wordpress:
     image: wordpress
+    volumes:
+      - wordpress_data:/var/www/html
+    networks:
+      - my_network
+    restart: always
     container_name: wordpress
+    expose:
+      - "9000"
     build:
       context: requirements/wordpress
       dockerfile: dockerfile
     env_file: .env
+
+volumes:
+  mariadb_data:
+    driver: local
+    name: mariadb_data
+    driver_opts:
+      type: 'none'
+      device: '/home/mjulliat/Project/inception/srcs/data/mariadb'
+      o: 'bind'
+  wordpress_data:
+    driver: local
+    name: wordpress_data
+    driver_opts:
+      type: 'none'
+      device: '/home/mjulliat/Project/inception/srcs/data/wordpress'
+      o: 'bind'
+
+networks:
+  my_network:
+    name: my_network
+    driver: bridge
