@@ -9,8 +9,6 @@ RUN mkdir -p /etc/nginx/ssl \
              /var/run/nginx
 RUN chmod 775 /var/www/html
 
-COPY tools/index.html /var/www/html/index.html
-COPY tools/leRond.jpg /var/www/html/leRond.jpg
 COPY conf/nginx.conf /etc/nginx/conf.d
 COPY conf/inception.crt /etc/nginx/ssl/inception.crt
 COPY conf/inception.key /etc/nginx/ssl/inception.key

@@ -3,12 +3,14 @@ version: '3.8'
 services:
   nginx:
     image: nginx
+    container_name: nginx
     volumes:
       - wordpress_data:/var/www/html
     networks:
       - my_network
+    depends_on:
+      - wordpress
     restart: always
-    container_name: nginx
     ports:
       - "443:443"
     build:
@@ -16,29 +18,16 @@ services:
       dockerfile: dockerfile
     env_file: .env
 
-  mariadb:
-    image: mariadb
-    volumes:
-      - mariadb_data:/var/lib/mysql
-    networks:
-      - my_network
-    restart: always
-    container_name: mariadb
-    expose:
-      - "3306"
-    build:
-      context: requirements/mariadb
-      dockerfile: dockerfile
-    env_file: .env
-
   wordpress:
     image: wordpress
+    container_name: wordpress
     volumes:
       - wordpress_data:/var/www/html
     networks:
       - my_network
+    depends_on:
+      - mariadb
     restart: always
-    container_name: wordpress
     expose:
       - "9000"
     build:
@@ -46,20 +35,35 @@ services:
       dockerfile: dockerfile
     env_file: .env
 
+  mariadb:
+    image: mariadb
+    container_name: mariadb
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    networks:
+      - my_network
+    restart: always
+    expose:
+      - "3306"
+    build:
+      context: requirements/mariadb
+      dockerfile: dockerfile
+    env_file: .env
+
 volumes:
-  mariadb_data:
-    driver: local
-    name: mariadb_data
-    driver_opts:
-      type: 'none'
-      device: '/home/mjulliat/Project/inception/srcs/data/mariadb'
-      o: 'bind'
   wordpress_data:
     driver: local
     name: wordpress_data
     driver_opts:
       type: 'none'
       device: '/home/mjulliat/Project/inception/srcs/data/wordpress'
+      o: 'bind'
+  mariadb_data:
+    driver: local
+    name: mariadb_data
+    driver_opts:
+      type: 'none'
+      device: '/home/mjulliat/Project/inception/srcs/data/mariadb'
       o: 'bind'
 
 networks:

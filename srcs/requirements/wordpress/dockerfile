@@ -4,13 +4,13 @@ FROM debian:bullseye
 # installation of the service
 RUN apt-get update && apt-get upgrade -y
 RUN apt-get install vim \
-    wget \
-    php7.3 \
+    wget -y
+RUN apt-get install php7.4 \
     php-fpm \
     php-mysql \
     mariadb-client -y
 
-COPY conf/www.conf /etc/php/7.3/fpm/pool.d/www.conf
+COPY conf/www.conf /etc/php/7.4/fpm/pool.d/www.conf
 
 RUN mkdir -p /run/php
 
@@ -21,7 +21,5 @@ EXPOSE 9000
 
 ENTRYPOINT ["sh", "/usr/local/bin/config_wp.sh"]
 
-WORKDIR /var/www/html
-
-#CMD ["sleep", "10000000000000000"]
 CMD ["/usr/sbin/php-fpm7.4", "-F"]
+#CMD ["sleep", "10000000000000000"]
