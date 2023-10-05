@@ -1,5 +1,5 @@
 
-VOLUME_PATH	= srcs/data
+VOLUME_PATH	= /home/mjulliat42/data
 
 DCOMP_PATH	= srcs/docker-compose.yml
 

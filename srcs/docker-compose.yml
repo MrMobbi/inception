@@ -56,14 +56,14 @@ volumes:
     name: wordpress_data
     driver_opts:
       type: 'none'
-      device: '/home/mjulliat/Project/inception/srcs/data/wordpress'
+      device: '/home/mjulliat42/data/wordpress'
       o: 'bind'
   mariadb_data:
     driver: local
     name: mariadb_data
     driver_opts:
       type: 'none'
-      device: '/home/mjulliat/Project/inception/srcs/data/mariadb'
+      device: '/home/mjulliat42/data/mariadb'
       o: 'bind'
 
 networks:
