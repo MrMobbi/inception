@@ -1,5 +1,5 @@
 
-VOLUME_PATH	= /home/mjulliat42/data
+VOLUME_PATH	= /home/mjulliat/data
 
 DCOMP_PATH	= srcs/docker-compose.yml
 
@@ -32,12 +32,14 @@ ls:
 		docker ps
 		docker volume ls
 
-clean:	stop clean_volumes
+clean:	stop
 		docker system prune -a -f
+
+fclean: clean clean_volumes
 
 clean_volumes:
 		docker volume rm $$(docker volume ls -q);
 		rm -rf $(VOLUME_PATH)/mariadb
 		rm -rf $(VOLUME_PATH)/wordpress
 
-re:		clean all
+re:		fclean all

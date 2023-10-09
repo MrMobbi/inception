@@ -1,13 +1,15 @@
 #!/bin/bash
 
-sleep 10
+while ! mariadb -h $SQL_HOST -u $SQL_USER -p $SQL_PWD $SQL_NAME &>/dev/null; do
+  sleep 3
+done
 
 if [ ! -e ./var/www/html/wp-config.php ]
 then
 
     # installation of CLI [inteface textuel pour ligne de commande]
-    wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
-         && chmod +x wp-cli.phar
+    wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+    chmod +x wp-cli.phar
 
     # installing wordpress
     ./wp-cli.phar core download http://wordpress.org/latest.tar.gz \
