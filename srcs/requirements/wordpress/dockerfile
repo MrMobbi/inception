@@ -4,6 +4,7 @@ FROM debian:bullseye
 # installation of the service
 RUN apt-get update && apt-get upgrade -y
 RUN apt-get install vim \
+    curl \
     wget -y
 RUN apt-get install php7.4 \
     php-fpm \

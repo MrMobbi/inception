@@ -1,17 +1,29 @@
 
 FROM debian:bullseye
 
-RUN apt-get update && apt-get upgrade -y
-RUN apt-get install mariadb-server \ 
+RUN apt-get update -y && \
+    apt-get upgrade -y
+RUN apt-get install mariadb-server \
                     vim -y
 
-RUN mkdir tools
-
-COPY conf/50-server.conf /etc/mysql/mariadb.conf.d/50-server.cnf
-COPY tools/init_db.sh tools/init_db.sh
+ARG SQL_USER
+ARG SQL_NAME
+ARG SQL_PWD
+ARG SQL_ROOT_PWD
 
 EXPOSE 3306
 
-ENTRYPOINT ["sh", "tools/init_db.sh"]
+COPY ./tools/init_db.sh /tmp/init_db.sh
 
-CMD ["/usr/bin/mysqld_safe"]
+#COPY ./conf/50-server.cnf /etc/mysql/mariadb.conf.d/50-server.cnf
+
+RUN echo ""
+RUN echo "[mysqld]" >> /etc/mysql/my.cnf
+RUN echo "skip-networking=0" >> /etc/mysql/my.cnf
+RUN echo "skip-bind-address" >> /etc/mysql/my.cnf
+RUN echo "datadir=/var/lib/mysql" >> /etc/mysql/my.cnft
+
+ENTRYPOINT ["sh", "tmp/init_db.sh"]
+
+CMD ["mysqld"]
+#CMD ["sleep", "10000000000000000"]
